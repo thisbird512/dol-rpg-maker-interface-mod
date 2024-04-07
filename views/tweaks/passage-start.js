@@ -47,19 +47,13 @@ class LocalPassageStartImage extends HTMLElement {
                     position: relative !important;
                 }
                 #img1 {
-                    -webkit-animation-delay: -8s;
-                    animation-delay: -8s;
+                    -webkit-animation-delay: -6s;
+                    animation-delay: -6s;
                 }
-                #img2 {
-                    -webkit-animation-delay: -4s;
-                    animation-delay: -4s;
-                }
-                
             </style>
             <div class="fadein">
                 <img id="img0" src="game/_rpgmaker-interface/assets/images/banners/abstract.png">
                 <img id="img1" src="game/_rpgmaker-interface/assets/images/banners/forest.png">
-                <img id="img2" src="img/misc/banner.png">
             </div>`;
 	}
 }
