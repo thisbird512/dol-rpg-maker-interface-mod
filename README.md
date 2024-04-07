@@ -1,4 +1,4 @@
-<img src="./game/_rpgmaker-interface/assets/icons/large.png" alt="Image description" title="Image Title" />
+<img src="./assets/icons/large.png" alt="Image description" title="Image Title" />
 
 # RPG Maker Interface
 
