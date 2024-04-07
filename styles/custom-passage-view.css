@@ -1,0 +1,17 @@
+.custom-passage-container {
+	max-width: 860px;
+	line-height: 1.75;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* #gameVersionDisplay,
+#gameVersionDisplay2,
+#feat,
+#mobileStats,
+#exportWarning,
+#customOverlayContainer,
+#cbtToggleMenu,
+#next {
+	display: visible;
+} */
