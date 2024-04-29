@@ -1,8 +1,6 @@
-class CustomPassageView extends HTMLElement {
-	constructor() {
-		super();
-	}
+const { SETTINGS } = require("../settings");
 
+class CustomPassageView extends HTMLElement {
 	/** @type {HTMLElement} */
 	passageContainer;
 
@@ -30,42 +28,68 @@ class CustomPassageView extends HTMLElement {
 
 	shouldContinue = true;
 	disContinued = false;
-	specialElementIds = [
-		"gameVersionDisplay",
-		"gameVersionDisplay2",
-		"feat",
-		"mobileStats",
-		"exportWarning",
-		"customOverlayContainer",
-		"cbtToggleMenu",
-		"next",
-	];
+	specialElementIds = ["gameVersionDisplay", "gameVersionDisplay2", "feat", "mobileStats", "exportWarning", "customOverlayContainer", "cbtToggleMenu", "next"];
+
+	_currentIndex = 0;
+	getDataIndex() {
+		this._currentIndex++;
+		if (this._currentIndex > 10000000) this._currentIndex = 0;
+		return this._currentIndex;
+	}
+
+	// generateTextIndexSpan() {
+	// 	const span = document.createElement("span");
+	// 	span.style.display = "none";
+	// 	span.setAttribute("data-id", this.getDataIndex());
+	// 	span.setAttribute("data-skip-mutation", "true");
+	// 	return span;
+	// }
 
 	/**
 	 * @param {{from: HTMLElement, to: HTMLElement, passageElement: HTMLElement}} param0
 	 * @param {number} depth
-	 * @returns
 	 */
-	async animateCharactersInSection_({ from, to }, depth = 0) {
+	async animateCharactersInSection_({ from, to, skip, dontSkipFirstNode }, depth = 0) {
 		if (!this.passageContainer) throw new Error("Passage container not initialized");
 		if (!this.shouldContinue) return (this.disContinued = true);
 		if (!from) throw new Error("FROM container not given");
 		if (!to) throw new Error("TO container not given");
 
-		let waitTime = 10;
-		if (SETTINGS.textSpeed === "slow") waitTime = 30;
-		if (SETTINGS.textSpeed === "normal") waitTime = 10;
-		if (SETTINGS.textSpeed === "fast") waitTime = 5;
-		if (SETTINGS.textSpeed === "fastest") waitTime = 1;
-		const waitTick = () => new Promise(resolve => setTimeout(resolve, waitTime));
+		const waitTick = () => {
+			let waitTime = 10;
+			switch (SETTINGS.textSpeed.value) {
+				case 1:
+					waitTime = 30;
+					break;
+				case 2:
+					waitTime = 10;
+					break;
+				case 3:
+					waitTime = 5;
+					break;
+				case 4:
+					waitTime = 1;
+					break;
+			}
+			if (SETTINGS.textSpeed.value === -1 || skip) waitTime = 0;
+			return new Promise(resolve => setTimeout(resolve, waitTime));
+		};
 		const treeWalker = document.createTreeWalker(from, NodeFilter.SHOW_ALL, null, false);
-		treeWalker.nextNode();
-		let currentNode = treeWalker.currentNode;
+		if (!dontSkipFirstNode) treeWalker.nextNode();
 
+		let currentNode = treeWalker.currentNode;
 		outerLoop: while (currentNode) {
 			if (!this.shouldContinue) return (this.disContinued = true);
 
 			if (currentNode.nodeType === Node.TEXT_NODE) {
+				// if (currentNode.textContent.trim() === "") {
+				// 	currentNode = treeWalker.nextNode();
+				// 	continue outerLoop;
+				// }
+
+				// const textIndexSpan = this.generateTextIndexSpan();
+				// currentNode.parentElement.insertBefore(textIndexSpan, currentNode);
+				// to.appendChild(textIndexSpan.cloneNode());
 				const clonedNode = currentNode.cloneNode();
 				const textNode = document.createTextNode("");
 				to.appendChild(textNode);
@@ -78,7 +102,9 @@ class CustomPassageView extends HTMLElement {
 
 				currentNode = treeWalker.nextNode();
 			} else if (currentNode.nodeType === Node.ELEMENT_NODE) {
+				currentNode.setAttribute("data-id", this.getDataIndex());
 				const clonedNode = currentNode.cloneNode(true);
+				clonedNode.classList.remove("passage-in");
 				const innerHTML = clonedNode.innerHTML.trim();
 				clonedNode.innerHTML = "";
 
@@ -127,18 +153,27 @@ class CustomPassageView extends HTMLElement {
 						break;
 				}
 
-				await waitTick();
 				if (innerHTML) {
 					await this.animateCharactersInSection_({ from: currentNode, to: clonedNode }, depth + 1);
 				}
 				currentNode = treeWalker.nextSibling();
 			} else {
+				// Add, but don't animate, to keep count & structure in sync
+				to.appendChild(currentNode.cloneNode(true));
 				currentNode = treeWalker.nextNode();
 			}
 		}
 
 		this.disContinued = true;
+		if (depth === 0) {
+			// for (const key in ["SPACE", "LEFT", "RIGHT"]) {
+			// for (const key in ["SPACE"]) {
+			// }
+			// awaitedKeyPresses.SPACE.stopListening();
+		}
 	}
 }
 
 customElements.define("custom-passage-view", CustomPassageView);
+
+module.exports = { CustomPassageView };

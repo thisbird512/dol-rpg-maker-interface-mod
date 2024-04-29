@@ -59,13 +59,18 @@ class LocalPassageStartImage extends HTMLElement {
 }
 customElements.define("local-passage-start-image", LocalPassageStartImage);
 
-function tweakPassageStart() {
+async function tweakPassageStart() {
+	if (document.getElementsByTagName("local-passage-start-image").length > 0) return;
+
 	const passageStart = document.getElementById("passage-start");
 	if (!passageStart) throw new Error("[tweak passage start] passage-start element not found.");
 
 	/** @type {HTMLImageElement} */
 	const img = passageStart.querySelector("img.resize");
 	if (!img) throw new Error("[tweak passage start] Image element not found.");
+
 	const newImgContainer = document.createElement("local-passage-start-image");
 	img.replaceWith(newImgContainer);
 }
+
+module.exports = { tweakPassageStart };
