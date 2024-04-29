@@ -6,7 +6,7 @@ class CustomPassageView extends HTMLElement {
 
 	/**
 	 * Call right after constructor. Initializes the passage container and appends it to the custom passage view.
-	 * */
+	 */
 	initialize() {
 		this.id = "custom-passage-view";
 		const passageContainer = document.createElement("div");
@@ -135,7 +135,6 @@ class CustomPassageView extends HTMLElement {
 						break;
 					case "svg":
 						to.appendChild(clonedNode);
-						/** @type {ChildNode} */
 						let childNode = currentNode.firstChild;
 						while (childNode) {
 							const clonedChild = childNode.cloneNode();

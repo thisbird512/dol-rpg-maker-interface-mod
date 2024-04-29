@@ -1,6 +1,7 @@
 "use-strict";
 
 const { findMatchingTextNode } = require("./utils/utils");
+const { CustomPassageView } = require("./views/custom-passage-view");
 const { tweakPassageStart } = require("./views/tweaks/passage-start");
 
 const specialElementIdsEncountered = [];
@@ -156,7 +157,7 @@ const specialElementIds = [
 ];
 
 /**
- * @param {Object} options
+ * @param {any} options
  * @param {HTMLElement} options.passageElement
  * @param {HTMLElement} options.addedNode
  */

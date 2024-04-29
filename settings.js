@@ -1,12 +1,16 @@
 /**
  * Settings for the game, also manages state (kind of)
+ *
  * @type {{
  *  textSpeed: {
- * 	value: number
- * 	increase: () => void,
- * 	decrease: () => void
- * }
- * }} SETTINGS
+ * 		min: number,
+ * 		max: number,
+ * 		value: number
+ * 		increase: () => void,
+ * 		decrease: () => void,
+ * 		skip: () => void
+ * 	}
+ * }}
  */
 const SETTINGS = {
 	textSpeed: {

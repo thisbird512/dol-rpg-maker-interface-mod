@@ -1,15 +1,18 @@
 /**
  * Types of key presses
+ *
  * @typedef {"SPACE" | "UP" | "DOWN" | "LEFT" | "RIGHT"} KeyCode
  */
 
 /**
  * Return type of awaitKeyPress
+ *
  * @typedef {{ promise: Promise<void>, stopListening: (keyPressed: KeyCode) => void }} AwaitKeyPressReturnType
  */
 
 /**
  * Awaits a key press event for the specified key.
+ *
  * @param {KeyCode} key
  * @returns {AwaitKeyPressReturnType}
  */
@@ -71,7 +74,7 @@ function findMatchingTextNode({ findIn, textcontent }) {
 
 /**
  * @param {{findIn: HTMLElement, givenElement: HTMLElement, elementTag: string, innerHTML: string}} param0
- * */
+ */
 // function findMatchingElementInPassages(givenElement, elementTag, innerHTML) {
 // function findMatchingElementIn({ findIn, givenElement, elementTag, innerHTML }) {
 // 	const givenElementAttributes = givenElement.attributes;
